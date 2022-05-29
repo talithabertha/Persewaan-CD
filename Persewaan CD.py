@@ -1,4 +1,5 @@
 
+from glob import escape
 import pandas as pd
 import openpyxl
 from pkg_resources import FileMetadata
@@ -139,3 +140,34 @@ def menu_admin():
                 print("Mohon masukkan angka 1/2/3 :")
                 pass
     return el, True            
+
+def menu_editlist():
+    global es
+    print("============EDIT LIST============")
+    print("1. Menambah ")
+    print("2. Mengurang ")
+    print("3. Kembali ")
+    print("==================================")
+    while True:
+        try:
+            es = int(input("Mohon masukkan angka 1/2/3 :"))
+        except:
+                print("Mohon masukkan angka 1/2/3 :")
+        else:
+            if es in [1,2,3]:
+                act_menu_editlist()
+                break
+            else:
+                print("Mohon masukkan angka 1/2/3 :")
+                pass
+    return es, True
+
+def act_menu_editlist():
+    global es
+    if es == 1:
+        pilih_genre()
+        nambahCD()
+    else:
+        pilih_genre()
+        ngurangcd()
+    

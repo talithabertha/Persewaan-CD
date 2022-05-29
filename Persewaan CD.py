@@ -71,3 +71,71 @@ def login_admin():
             print("============================================")
             print("Username salah!")
             print("============================================")
+
+def register():
+    file = "database.xlsx"
+    database= pd.read_excel(file,sheet_name="Data Member")
+    df=pd.DataFrame(database)
+
+    print("============ BUAT MEMBER ANDA ============")
+    nama = str(input("Nama :     "))
+    alamat = str(input("Alamat :      "))
+    tanggal_lahir = str(input("Tanggal lahir :     "))
+    identitas = str(input("Identitas (SIM/KTP):  "))
+    nomor_identitas = str(input("Nomor identitas :     "))
+    nomor_hp = str(input("Nomor HP :      "))
+    while True:
+        username = str(input("Username :      "))
+        if username in (df['Username'].values):
+            print("Username tidak tersedia! ") 
+        else:
+            break
+    password = str(input("Password :      "))
+    
+    print("============================================")
+    print("Nama = ", nama )
+    print("Alamat = ", alamat)
+    print("Tanggal lahir = ", tanggal_lahir)
+    print("Identitas = ", identitas)
+    print("Nomor Identitas = ", nomor_identitas)
+    print("Nomor HP = ", nomor_hp)
+    print("Username = ", username)
+    print("Password =" , password) 
+    print("============================================")
+
+    datamember = ({'Nama': nama, 'Alamat' : alamat, 'Tanggal Lahir' : tanggal_lahir, 'Identitas' : identitas, 'Nomor identitas' : nomor_identitas,'Nomor HP': nomor_hp,'Username': username,'Password' : password})
+
+    cekdata = input("Apakah data sudah benar? Y/N : ")
+    if cekdata == "Y":
+        print("============================================")
+        df= df.append(datamember,ignore_index= True)
+        with pd.ExcelWriter("database.xlsx", mode = "a",engine='openpyxl',if_sheet_exists='overlay') as writer:
+            df.to_excel(writer,sheet_name="Data Member",index= False)
+        print("Registrasi Berhasil") 
+        print("============================================")   
+        return progam()
+    else:
+        print("============================================")
+        print("Mohon masukkan data dengan benar !")
+        return register ()
+    
+def menu_admin():
+    global el
+    print("================MENU==================")
+    print("1. Edit list CD ")
+    print("2. List penyewa ")
+    print("3. Log out ")
+    print("======================================")
+    while True:
+        try:
+            el = int(input("Mohon masukkan angka 1/2/3 : "))
+        except:
+            print("Mohon masukkan angka 1/2/3 :")
+        else:
+            if el in [1,2,3]:
+                act_menu_admin()
+                break
+            else:
+                print("Mohon masukkan angka 1/2/3 :")
+                pass
+    return el, True            

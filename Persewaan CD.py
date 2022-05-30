@@ -170,4 +170,260 @@ def act_menu_editlist():
     else:
         pilih_genre()
         ngurangcd()
+
+def act_menu_admin():
+    global el
     
+    if el == 1:
+        menu_editlist()
+    elif el == 2:
+        pass
+    else:
+        print("====================")
+        print("Berhasil Logout !")
+        print("====================")
+        pass
+
+def pilih_genre():
+    print("============================================")
+    print("1.Romance")
+    print("2.Horror/Thriller")
+    print("3.Comedy")
+    print("4.Action")
+    print("============================================")
+
+def nambahCD():
+    global genre
+    while True:
+        try:
+            genre= int(input("Pilih Genre"))
+        except:
+            print("Mohon masukkan angka 1/2/3/4 :")
+        else:
+            if genre in [1,2,3,4]:
+                inputcd()
+                break
+            else:
+                print("Mohon masukkan angka 1/2/3/4 :")
+                pass
+
+def inputcd():
+    global genre
+    if genre == 1:
+        file = "database.xlsx"
+        database= pd.read_excel(file,sheet_name="Genre 1")
+        df=pd.DataFrame(database)
+
+        judulcd = str(input("Judul CD :     "))
+        stokcd = int(input("Stok :     "))
+        print("==========================")
+        print("Judul Film :", judulcd)
+        print("Stok : ", stokcd)
+        print("==========================")
+        
+        datacd = ({'Judul CD': judulcd, 'Stok' : stokcd})
+        
+        cekdata = input("Apakah data sudah benar? Y/N : ")
+        if cekdata == "Y":
+            print("============================================")
+            df= df.append(datacd,ignore_index= True)
+            with pd.ExcelWriter("database.xlsx", mode = "a",engine='openpyxl', if_sheet_exists='replace') as writer:
+                df.to_excel(writer,sheet_name="Genre 1",index= False)
+            print("Input CD berhasil!") 
+            print("============================================")
+            menu_admin()
+        else:
+            print("============================================")
+            print("Mohon masukkan data dengan benar !")
+            return inputcd()
+    elif genre == 2:
+        file = "database.xlsx"
+        database= pd.read_excel(file,sheet_name="Genre 2")
+        df=pd.DataFrame(database)
+
+        judulcd = str(input("Judul CD :     "))
+        stokcd = int(input("Stok :     "))
+        print("==========================")
+        print("Judul Film :", judulcd)
+        print("Stok : ", stokcd)
+        print("==========================")
+        
+        datacd = ({'Judul CD': judulcd, 'Stok' : stokcd})
+        
+        cekdata = input("Apakah data sudah benar? Y/N : ")
+        if cekdata == "Y":
+            print("============================================")
+            df= df.append(datacd,ignore_index= True)
+            with pd.ExcelWriter("database.xlsx", mode = "a",engine='openpyxl', if_sheet_exists='replace') as writer:
+                df.to_excel(writer,sheet_name="Genre 2",index= False)
+            print("Input CD berhasil!") 
+            print("============================================")
+            menu_admin()
+        else:
+            print("============================================")
+            print("Mohon masukkan data dengan benar !")
+            return inputcd()
+    elif genre == 3:
+        file = "database.xlsx"
+        database= pd.read_excel(file,sheet_name="Genre 3")
+        df=pd.DataFrame(database)
+
+        judulcd = str(input("Judul CD :     "))
+        stokcd = int(input("Stok :     "))
+        print("==========================")
+        print("Judul Film :", judulcd)
+        print("Stok : ", stokcd)
+        print("==========================")
+        
+        datacd = ({'Judul CD': judulcd, 'Stok' : stokcd})
+        
+        cekdata = input("Apakah data sudah benar? Y/N : ")
+        if cekdata == "Y":
+            print("============================================")
+            df= df.append(datacd,ignore_index= True)
+            with pd.ExcelWriter("database.xlsx", mode = "a",engine='openpyxl', if_sheet_exists='replace') as writer:
+                df.to_excel(writer,sheet_name="Genre 3",index= False)
+            print("Input CD berhasil!") 
+            print("============================================")
+            menu_admin()
+        else:
+            print("============================================")
+            print("Mohon masukkan data dengan benar !")
+            return inputcd()
+    else:
+        file = "database.xlsx"
+        database= pd.read_excel(file,sheet_name="Genre 4")
+        df=pd.DataFrame(database)
+
+        judulcd = str(input("Judul CD :     "))
+        stokcd = int(input("Stok :     "))
+        print("==========================")
+        print("Judul Film :", judulcd)
+        print("Stok : ", stokcd)
+        print("==========================")
+        
+        datacd = ({'Judul CD': judulcd, 'Stok' : stokcd})
+        
+        cekdata = input("Apakah data sudah benar? Y/N : ")
+        if cekdata == "Y":
+            print("============================================")
+            df= df.append(datacd,ignore_index= True)
+            with pd.ExcelWriter("database.xlsx", mode = "a",engine='openpyxl', if_sheet_exists='overlay') as writer:
+                df.to_excel(writer,sheet_name="Genre 4",index= False)
+            print("Input CD berhasil!") 
+            print("============================================")
+            menu_admin()
+        else:
+            print("============================================")
+            print("Mohon masukkan data dengan benar !")
+            return inputcd()
+
+def ngurangcd():
+    global genre
+    while True:
+        try:
+            genre= int(input("Pilih Genre"))
+        except:
+            print("Mohon masukkan angka 1/2/3/4 :")
+        else:
+            if genre in [1,2,3,4]:
+                removecd()
+                break
+            else:
+                print("Mohon masukkan angka 1/2/3/4 :")
+                pass
+
+def removecd():
+    global genre
+    if genre == 1:
+        filedata = "database.xlsx"
+        database= pd.read_excel(filedata,sheet_name="Genre 1")
+        file = openpyxl.load_workbook("database.xlsx")
+        sheet = file['Genre 1']
+
+        print(database)
+
+        deletedata = int(input("Pilih film yang ingin anda hapus (1/2/3/...): "))
+        data = database.loc[deletedata,'Judul CD']
+        print("Apa anda yakin ingin menghapus ", data ,"?")
+        validasi_delete = str(input( "Y/N :"))
+        if validasi_delete == "Y":
+            real_delete_data = deletedata + 2
+            sheet.delete_rows(idx=real_delete_data)
+            file.save("database.xlsx")
+            print("Judul CD telah dihapus!")
+            menu_admin()
+        else:
+            removecd()
+    elif genre == 2:
+        filedata = "database.xlsx"
+        database= pd.read_excel(filedata,sheet_name="Genre 2")
+        file = openpyxl.load_workbook("database.xlsx")
+        sheet = file['Genre 2']
+
+        print(database)
+
+        deletedata = int(input("Pilih film yang ingin anda hapus (1/2/3/...): "))
+        data = database.loc[deletedata,'Judul CD']
+        print("Apa anda yakin ingin menghapus ", data ,"?")
+        validasi_delete = str(input( "Y/N :"))
+        if validasi_delete == "Y":
+            real_delete_data = deletedata + 2
+            sheet.delete_rows(idx=real_delete_data)
+            file.save("database.xlsx")
+            print("Judul CD telah dihapus!")
+            menu_admin()
+        else:
+            removecd()
+    elif genre == 3:
+        filedata = "database.xlsx"
+        database= pd.read_excel(filedata,sheet_name="Genre 3")
+        file = openpyxl.load_workbook("database.xlsx")
+        sheet = file['Genre 3']
+
+        print(database)
+
+        deletedata = int(input("Pilih film yang ingin anda hapus (1/2/3/...): "))
+        data = database.loc[deletedata,'Judul CD']
+        print("Apa anda yakin ingin menghapus ", data ,"?")
+        validasi_delete = str(input( "Y/N :"))
+        if validasi_delete == "Y":
+            real_delete_data = deletedata + 2
+            sheet.delete_rows(idx=real_delete_data)
+            file.save("database.xlsx")
+            print("Judul CD telah dihapus!")
+            menu_admin()
+        else:
+            removecd()
+    else:
+        filedata = "database.xlsx"
+        database= pd.read_excel(filedata,sheet_name="Genre 4")
+        file = openpyxl.load_workbook("database.xlsx")
+        sheet = file['Genre 4']
+
+        print(database)
+
+        deletedata = int(input("Pilih film yang ingin anda hapus (1/2/3/...): "))
+        data = database.loc[deletedata,'Judul CD']
+        print("Apa anda yakin ingin menghapus ", data, "?")
+        validasi_delete = str(input( "Y/N :"))
+        if validasi_delete == "Y":
+            real_delete_data = deletedata + 2
+            sheet.delete_rows(idx=real_delete_data)
+            file.save("database.xlsx")
+            print("Judul CD telah dihapus!")
+            menu_admin()
+        else:
+            removecd()
+
+def progam():
+    global cmu
+    global el
+    menu_utama()
+    if cmu == 1 :
+        cek_login_member()
+    else:
+        login_admin()
+        
+
+progam()

@@ -20,18 +20,18 @@ def menu_utama():
         try:
             cmu = int(input("Mohon masukkan angka 1/2 : "))
         except:
-            print("Mohon masukkan angka 1/2 :")
+            print("Mohon masukkan angka 1/2 : ")
         else:
             if cmu in [1,2]:
                 break
             else:
-                print("Mohon masukkan angka 1/2 :")
+                print("Mohon masukkan angka 1/2 : ")
                 pass
         
 def cek_login_member():
     global cek_member
     print("============================================")
-    cek_member = str(input("Apakah anda memiliki member? Y/N  :")).upper()
+    cek_member = str(input("Apakah anda memiliki member? Y/N  : ")).upper()
     if cek_member == 'Y':
         login_member()
     else:
@@ -45,8 +45,8 @@ def login_member():
     df=pd.DataFrame(database)
     
     print("============================================")
-    user = str(input("Username: "))
-    password = str(input("Password: "))
+    user = str(input("Username : "))
+    password = str(input("Password : "))
     if  user in list(df['Username'].values):
         if password in list(df.loc[df.Username==user,'Password']):
             nama = df.loc[df.Username==user,'Nama'].to_string(index=False)
@@ -88,33 +88,33 @@ def register():
     df=pd.DataFrame(database)
 
     print("============ BUAT MEMBER ANDA ============")
-    nama = str(input("Nama :     "))
+    nama = str(input("Nama\t\t\t\t: "))
     list1 = nama.split()
     real_nama = ""
     for e in list1:
         real_nama = real_nama + e.capitalize() + " "
-    alamat = str(input("Alamat :      "))
-    tanggal_lahir = str(input("Tanggal lahir (HH/BB/TTTT):     "))
-    identitas = str(input("Identitas (SIM/KTP):  ")).upper()
-    nomor_identitas = int(input("Nomor identitas :     "))
-    nomor_hp = int(input("Nomor HP :      "))
+    alamat = str(input("Alamat\t\t\t\t: "))
+    tanggal_lahir = str(input("Tanggal lahir (HH/BB/TTTT)\t: "))
+    identitas = str(input("Identitas (SIM/KTP)\t\t: ")).upper()
+    nomor_identitas = int(input("Nomor identitas\t\t\t: "))
+    nomor_hp = int(input("Nomor HP\t\t\t: "))
     while True:
-        username = str(input("Username :      "))
+        username = str(input("Username\t\t\t: "))
         if username in (df['Username'].values):
             print("Username tidak tersedia! ") 
         else:
             break
-    password = str(input("Password :      "))
+    password = str(input("Password\t\t\t: "))
     
     print("============================================")
-    print("Nama = ", real_nama )
-    print("Alamat = ", alamat)
-    print("Tanggal lahir = ", tanggal_lahir)
-    print("Identitas = ", identitas)
-    print("Nomor Identitas = ", nomor_identitas)
-    print("Nomor HP = ", nomor_hp)
-    print("Username = ", username)
-    print("Password =" , password) 
+    print("Nama\t\t = ", real_nama )
+    print("Alamat\t\t = ", alamat)
+    print("Tanggal lahir\t = ", tanggal_lahir)
+    print("Identitas\t = ", identitas)
+    print("Nomor Identitas\t = ", nomor_identitas)
+    print("Nomor HP\t = ", nomor_hp)
+    print("Username\t = ", username)
+    print("Password\t =" , password) 
     print("============================================")
 
     datamember = ({'Nama': real_nama, 'Alamat' : alamat, 'Tanggal Lahir' : tanggal_lahir, 'Identitas' : identitas, 'Nomor identitas' : nomor_identitas,'Nomor HP': nomor_hp,'Username': username,'Password' : password})
@@ -186,7 +186,7 @@ def menu_edit():
     print("==================================")
     while True:
         try:
-            me = int(input("Mohon masukkan angka 1/2/3 :"))
+            me = int(input("Mohon masukkan angka 1/2/3 : "))
         except:
             print("Mohon masukkan angka 1/2/3 :")
         else:
@@ -216,15 +216,15 @@ def menu_genre():
     print("==================================")
     while True:
         try:
-            meg = int(input("Mohon masukkan angka 1/2/3 :"))
+            meg = int(input("Mohon masukkan angka 1/2/3 : "))
         except:
-                print("Mohon masukkan angka 1/2/3 :")
+                print("Mohon masukkan angka 1/2/3 : ")
         else:
             if meg in [1,2,3]:
                 act_menu_genre()
                 break
             else:
-                print("Mohon masukkan angka 1/2/3 :")
+                print("Mohon masukkan angka 1/2/3 : ")
                 pass
     return meg, True
 
@@ -243,7 +243,7 @@ def tambah_genre():
     df=pd.DataFrame(database)   
 
     print("====================")
-    genre_baru = str(input("Input genre baru:  "))
+    genre_baru = str(input("Input genre baru :  "))
     n = len(df["Genre"])
     new_id_genre= ord("A") + n
     id_genre= chr(new_id_genre)
@@ -271,10 +271,10 @@ def hapus_genre():
     print("==============")
     print(data.to_string(index=False))
     print("==============")
-    kode_genre = str(input("Masukkan kode genre yang ingin anda hapus: "))
+    kode_genre = str(input("Masukkan kode genre yang ingin anda hapus : "))
     data_genre = df.loc[df.Kode==kode_genre,'Genre']
     print("Apa anda yakin ingin menghapus ", data_genre.to_string(index=False) ,"?")
-    validasi_delete = str(input( "Y/N :")).upper()
+    validasi_delete = str(input( "Y/N : ")).upper()
     if validasi_delete == "Y":
         delete_data_genre = df[df['Kode'] != kode_genre]
         with pd.ExcelWriter("database.xlsx", mode = "a",engine='openpyxl', if_sheet_exists='replace') as writer:
@@ -296,15 +296,15 @@ def menu_editlistCD():
     print("==================================")
     while True:
         try:
-            elc = int(input("Mohon masukkan angka 1/2/3 :"))
+            elc = int(input("Mohon masukkan angka 1/2/3 : "))
         except:
-                print("Mohon masukkan angka 1/2/3 :")
+                print("Mohon masukkan angka 1/2/3 : ")
         else:
             if elc in [1,2,3,4]:
                 act_menu_editlistCD()
                 break
             else:
-                print("Mohon masukkan angka 1/2/3 :")
+                print("Mohon masukkan angka 1/2/3 : ")
                 pass
     return elc, True
 
@@ -341,7 +341,7 @@ def nambahCD():
     df2=pd.DataFrame(database2)
     print("==============")
     while True:
-        judul_cd = str(input("Judul CD : "))
+        judul_cd = str(input("Judul CD\t: "))
         list1 = judul_cd.split()
         real_judul_cd = ""
         for e in list1:
@@ -349,7 +349,7 @@ def nambahCD():
 
         if real_judul_cd in (df['Judul CD'].values):
             print("Judul CD sudah ada! ")
-            ask_nambah_stok = str(input("Apakah anda ingin menambah stok? Y/N :" )).upper()
+            ask_nambah_stok = str(input("Apakah anda ingin menambah stok? Y/N : " )).upper()
             if ask_nambah_stok == 'Y':
                 nambah_stok()
             else:
@@ -357,7 +357,7 @@ def nambahCD():
         else:
             break
 
-    stok_cd = int(input("Stok CD : "))
+    stok_cd = int(input("Stok CD\t\t: "))
     print("==============")
     id_cd = kode_genre + str(len(df["ID"]) + 1)
     while True:
@@ -366,9 +366,9 @@ def nambahCD():
         else:
             break
     genre_cd = df2.loc[df2.Kode==kode_genre,'Genre'].to_string(index=False)
-    print("Genre :", genre_cd)
-    print("Judul CD :", real_judul_cd)
-    print("Stok:", stok_cd)
+    print("Genre\t\t:", genre_cd)
+    print("Judul CD\t:", real_judul_cd)
+    print("Stok\t\t:", stok_cd)
     print("==============")
 
     data_cd = ({'ID': id_cd, 'Genre': genre_cd, 'Judul CD': real_judul_cd, 'Stok': stok_cd})
@@ -397,7 +397,7 @@ def hapus_cd():
     print(data)
     print("==============")
     
-    id_cd = str(input("Masukkan ID CD yang ingin dihapus :")).upper()
+    id_cd = str(input("Masukkan ID CD yang ingin dihapus : ")).upper()
     validasi_delete_cd = df.loc[df.ID==id_cd,'Judul CD'].to_string(index=False)
     print("Apa anda yakin ingin menghapus ", validasi_delete_cd, "?")
     validasi_delete = str(input( "Y/N :"))
@@ -418,7 +418,7 @@ def nambah_stok():
     database= pd.read_excel(file,sheet_name="Data CD")
     df=pd.DataFrame(database)
 
-    new_stok = int(input("Masukkan jumlah stok baru :"))
+    new_stok = int(input("Masukkan jumlah stok baru : "))
     genre = df.loc[df.xs('Judul CD', axis=1)== real_judul_cd,'Genre'].to_string(index=False)
     stok_lama = df.loc[df.xs('Judul CD', axis=1)== real_judul_cd,'Stok'].to_string(index=False)
     int_stok_lama = df.loc[df.xs('Judul CD', axis=1)== real_judul_cd,'Stok']
@@ -461,7 +461,7 @@ def ubah_stok():
     print("==============")
     print(data)
     print("==============")
-    id_stok_cd = str(input("Masukkan ID CD yang ingin diubah stoknya :")).upper()
+    id_stok_cd = str(input("Masukkan ID CD yang ingin diubah stoknya : ")).upper()
     new_stok = int(input("Masukkan jumlah stok baru :"))
     judul = df.loc[df.ID==id_stok_cd,'Judul CD'].to_string(index=False)
     genre = df.loc[df.ID==id_stok_cd,'Genre'].to_string(index=False)
@@ -469,10 +469,10 @@ def ubah_stok():
     int_stok_lama = df.loc[df.ID==id_stok_cd,'Stok']
     stok_tersedia_lama = df.loc[df.ID==id_stok_cd,'Stok tersedia']
     print("==============")
-    print("Genre :", genre)
-    print("Judul CD :", judul)
-    print("Stok lama :", stok_lama)
-    print("Stok baru:", new_stok)
+    print("Genre\t: ", genre)
+    print("Judul CD\t: ", judul)
+    print("Stok lama\t: ", stok_lama)
+    print("Stok baru\t: ", new_stok)
     print("==============")
     cekdata = input("Apakah data sudah benar? Y/N : ").upper()
     if cekdata == "Y":
@@ -508,13 +508,13 @@ def menu_member():
         try:
             mm = int(input("Mohon masukkan angka 1/2/3 : "))
         except:
-            print("Mohon masukkan angka 1/2/3 :")
+            print("Mohon masukkan angka 1/2/3 : ")
         else:
             if mm in [1,2,3]:
                 act_menu_member()
                 break
             else:
-                print("Mohon masukkan angka 1/2/3 :")
+                print("Mohon masukkan angka 1/2/3 : ")
                 pass
     return mm, True
 
@@ -552,18 +552,18 @@ def sewa_cd():
     list_cd = df2.loc[df2.Genre==id_genre, ['ID','Judul CD']]
     print(list_cd)
     print("========================")
-    no_judul = int(input("Masukkan nomor film yang ingin disewa : "))
+    no_judul = int(input("Masukkan nomor film yang ingin disewa\t: "))
     judul_cd = df2.loc[no_judul, 'Judul CD']
     kode_cd = df2.loc[no_judul, 'ID']
     if df2.loc[no_judul, 'Stok tersedia'] == 0:
         print("Stok CD telah habis!")
         sewa_cd()
-    lama_pinjam = int(input("Lama peminjamaan (Dalam hari) : "))
+    lama_pinjam = int(input("Lama peminjamaan (Dalam hari)\t\t: "))
     print("========================")
-    print("Judul :", judul_cd)
-    print("Lama peminjaman :", lama_pinjam , "  hari")
+    print("Judul\t\t:", judul_cd)
+    print("Lama peminjaman\t:", lama_pinjam , "  hari")
     print("========================")
-    validasi_sewa = str(input("Apakah data sudah benar? Y/N  :")).upper()
+    validasi_sewa = str(input("Apakah data sudah benar? Y/N  : ")).upper()
     if validasi_sewa == "Y":
         stok_tersedia = df2.loc[df2.xs('Judul CD', axis=1)== judul_cd,'Stok tersedia']
         new_stok_tersedia = stok_tersedia - 1
@@ -603,14 +603,14 @@ def rincian():
         else:
             break
     print("====================RINCIAN=======================")
-    print("Nama Lengkap :", nama )
-    print("No.Identitas :", no_ident )
-    print("Judul CD :", judul_cd)
-    print("Tanggal pinjam :",  hari_ini)
-    print("Lama peminjaman :", lama_pinjam , "  hari")
-    print("Tanggal kembali :",  tanggal_kembali)
-    print("Harga sewa :", biaya_sewa)
-    print("Kode transaksi:", (str(no)+kode_cd))
+    print("Nama Lengkap\t\t: ", nama )
+    print("No.Identitas\t\t: ", no_ident )
+    print("Judul CD\t\t: ", judul_cd)
+    print("Tanggal pinjam\t\t: ",  hari_ini)
+    print("Lama peminjaman\t\t: ", lama_pinjam , "  hari")
+    print("Tanggal kembali\t\t: ",  tanggal_kembali)
+    print("Harga sewa\t\t: ", biaya_sewa)
+    print("Kode transaksi\t\t: ", (str(no)+kode_cd))
     print("==================================================")
     
     data_sewa = ({'No': no , 'Nama' : nama , 'No Identitas': no_ident ,'Kode transaksi' : (str(no)+kode_cd) ,'Judul CD' : judul_cd , "Tanggal Sewa" : str(hari_ini).split(',',1)[0] , "Tanggal Kembali" :str(tanggal_kembali).split(',',1)[0] , 'Status' : "Disewa", "Harga Sewa" : biaya_sewa })
@@ -684,18 +684,18 @@ def pengembalian ():
         if x > y:
             denda = 5000* int(str_lebih_hari) 
             print("=======STRUK=========")
-            print("Nama Lengkap :", nama )
-            print("No.Identitas :", no_ident )
-            print("Judul CD :", cd_disewa)
-            print("Kode transaksi:", kode_transaksi)
-            print("Tanggal sewa :",  tanggal_sewa.date())
-            print("Lama peminjaman :", y , "hari")
-            print("Tanggal pengembalian :",  hari_pengembalian)
-            print("Harga sewa:", harga_sewa.to_string(index=False))
-            print("Denda :", denda)
+            print("Nama Lengkap\t\t: ", nama )
+            print("No.Identitas\t\t: ", no_ident )
+            print("Judul CD\t\t: ", cd_disewa)
+            print("Kode transaksi\t\t: ", kode_transaksi)
+            print("Tanggal sewa\t\t: ",  tanggal_sewa.date())
+            print("Lama peminjaman\t\t: ", y , "hari")
+            print("Tanggal pengembalian\t: ",  hari_pengembalian)
+            print("Harga sewa\t\t: ", harga_sewa.to_string(index=False))
+            print("Denda\t\t\t: ", denda)
             total_harga = int(harga_sewa) + int(denda)
-            print("Total harga:", total_harga )
-            print("====================")
+            print("Total harga\t\t: ", total_harga )
+            print("=====================")
 
             df3.loc[df3.xs('Kode transaksi', axis=1)==kode_transaksi,'Status'] = status
             df3.loc[df3.xs('Kode transaksi', axis=1)==kode_transaksi,'Tanggal Pengembalian'] =str(hari_pengembalian).split(',',1)[0]
@@ -706,16 +706,16 @@ def pengembalian ():
             menu_member()
         else:
             print("=======STRUK=========")
-            print("Nama Lengkap :", nama )
-            print("No.Identitas :", no_ident )
-            print("Judul CD :", cd_disewa)
-            print("Kode transaksi:", kode_transaksi)
-            print("Tanggal sewa :",  tanggal_sewa.date())
-            print("Lama peminjaman :", y  , "hari")
-            print("Tanggal pengembalian :",  hari_pengembalian)
-            print("Harga sewa:", harga_sewa.to_string(index=False))
-            print("Denda : - ")
-            print("Total harga:", harga_sewa.to_string(index=False))
+            print("Nama Lengkap\t\t: ", nama )
+            print("No.Identitas\t\t: ", no_ident )
+            print("Judul CD\t: ", cd_disewa)
+            print("Kode transaksi\t\t: ", kode_transaksi)
+            print("Tanggal sewa\t\t: ",  tanggal_sewa.date())
+            print("Lama peminjaman\t\t: ", y  , "hari")
+            print("Tanggal pengembalian\t: ",  hari_pengembalian)
+            print("Harga sewa\t\t: ", harga_sewa.to_string(index=False))
+            print("Denda\t\t: - ")
+            print("Total harga\t\t: ", harga_sewa.to_string(index=False))
             print("====================")
             df3.loc[df3.xs('Kode transaksi', axis=1)==kode_transaksi,'Status'] = status
             df3.loc[df3.xs('Kode transaksi', axis=1)==kode_transaksi,'Tanggal Pengembalian'] = str(hari_pengembalian).split(',',1)[0]

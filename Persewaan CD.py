@@ -1,7 +1,7 @@
 
 from glob import glob
 from threading import local
-from turtle import st
+from turtle import clear, st
 import pandas as pd
 import openpyxl
 from pkg_resources import FileMetadata
@@ -114,7 +114,7 @@ def register():
     print("Nomor Identitas\t = ", nomor_identitas)
     print("Nomor HP\t = ", nomor_hp)
     print("Username\t = ", username)
-    print("Password\t =" , password) 
+    print("Password\t = " , password) 
     print("============================================")
 
     datamember = ({'Nama': real_nama, 'Alamat' : alamat, 'Tanggal Lahir' : tanggal_lahir, 'Identitas' : identitas, 'Nomor identitas' : nomor_identitas,'Nomor HP': nomor_hp,'Username': username,'Password' : password})
@@ -165,7 +165,7 @@ def act_menu_admin():
         print("====================")
         print("Berhasil Logout !")
         print("====================")
-        pass
+        menu_utama()
 
 def list_penyewa():
     file = "database.xlsx"
@@ -271,7 +271,7 @@ def hapus_genre():
     print("==============")
     print(data.to_string(index=False))
     print("==============")
-    kode_genre = str(input("Masukkan kode genre yang ingin anda hapus : "))
+    kode_genre = str(input("Masukkan kode genre yang ingin anda hapus : ")).upper
     data_genre = df.loc[df.Kode==kode_genre,'Genre']
     print("Apa anda yakin ingin menghapus ", data_genre.to_string(index=False) ,"?")
     validasi_delete = str(input( "Y/N : ")).upper()
@@ -371,7 +371,7 @@ def nambahCD():
     print("Stok\t\t:", stok_cd)
     print("==============")
 
-    data_cd = ({'ID': id_cd, 'Genre': genre_cd, 'Judul CD': real_judul_cd, 'Stok': stok_cd})
+    data_cd = ({'ID': id_cd, 'Genre': genre_cd, 'Judul CD': real_judul_cd, 'Stok': stok_cd, 'Stok tersedia': stok_cd})
 
     cekdata = input("Apakah data sudah benar? Y/N : ").upper()
     if cekdata == "Y":
@@ -400,7 +400,7 @@ def hapus_cd():
     id_cd = str(input("Masukkan ID CD yang ingin dihapus : ")).upper()
     validasi_delete_cd = df.loc[df.ID==id_cd,'Judul CD'].to_string(index=False)
     print("Apa anda yakin ingin menghapus ", validasi_delete_cd, "?")
-    validasi_delete = str(input( "Y/N :"))
+    validasi_delete = str(input( "Y/N :")).upper()
     if validasi_delete == "Y":
         delete_data_cd = df[df['ID'] != id_cd]
         with pd.ExcelWriter("database.xlsx", mode = "a",engine='openpyxl', if_sheet_exists='replace') as writer:
@@ -526,6 +526,8 @@ def act_menu_member():
         pengembalian()
     else:
         pass
+        clear
+        menu_utama()
 
 def sewa_cd():
     global judul_cd
@@ -613,10 +615,11 @@ def rincian():
     print("Kode transaksi\t\t: ", (str(no)+kode_cd))
     print("==================================================")
     
-    data_sewa = ({'No': no , 'Nama' : nama , 'No Identitas': no_ident ,'Kode transaksi' : (str(no)+kode_cd) ,'Judul CD' : judul_cd , "Tanggal Sewa" : str(hari_ini).split(',',1)[0] , "Tanggal Kembali" :str(tanggal_kembali).split(',',1)[0] , 'Status' : "Disewa", "Harga Sewa" : biaya_sewa })
+    data_sewa = ({'No': no , 'Nama' : nama , 'No Identitas': no_ident ,'Kode transaksi' : (str(no)+kode_cd) ,'Judul CD' : judul_cd , "Tanggal Sewa" : str(hari_ini).split(',',1)[0] , "Tanggal Kembali" :str(tanggal_kembali).split(',',1)[0] , 'Status' : "Disewa", "Harga Sewa" : biaya_sewa, 'Tanggal Pengembalian' : '-', 'Denda' : '-', 'Total Harga': '-'})
     df= df.append(data_sewa,ignore_index= True)
     with pd.ExcelWriter("database.xlsx", mode = "a",engine='openpyxl',if_sheet_exists='overlay') as writer:
         df.to_excel(writer,sheet_name="Data Sewa",index= False)
+    menu_member()
 
 def kelebihanhari():
     from datetime import datetime

@@ -7,6 +7,9 @@ from pkg_resources import FileMetadata
 import datetime
 import numpy as np
 import re
+import sys
+import os
+
 
 def menu_utama():
     global cmu
@@ -43,6 +46,7 @@ def cek_login_member():
 def login_member():
     global nama
     global no_ident
+    global user
     file = "database.xlsx"
     database= pd.read_excel(file,sheet_name="Data Member")
     df=pd.DataFrame(database)
@@ -89,6 +93,10 @@ def validasi_nomer(nomor_hp):
     pola = re.compile('(08)?[0-9]\d{9}')
     return pola.match(nomor_hp)
 
+def validasi_nik(nomor_identitas):
+    pola = re.compile('[0-9]\d{15}')
+    return pola.match(nomor_identitas)
+
 def register():
     file = "database.xlsx"
     database= pd.read_excel(file,sheet_name="Data Member")
@@ -104,14 +112,21 @@ def register():
     tanggal_lahir = str(input("Tanggal lahir (HH/BB/TTTT)\t: "))
     while True:
         identitas = str(input("Identitas (SIM/KTP)\t\t: ")).upper()
-        if identitas == "SIM" and "KTP":
+        if identitas == "SIM" or identitas == "KTP":
             break
         else:
             print("Masukkan data dengan benar!")
-    nomor_identitas = int(input("Nomor identitas\t\t\t: "))
+    while True:
+        nomor_identitas = input("Nomor identitas\t\t\t: ")
+        if validasi_nik(nomor_identitas):
+            nomor_identitas = str(nomor_identitas) + ' '
+            break
+        else:
+            print("Masukkan data dengan benar!")
     while True:
         nomor_hp = input("Nomor HP\t\t\t: ")
         if validasi_nomer(nomor_hp):
+            nomor_hp = str(nomor_hp)+ ' '
             break
         else:
             print("Masukkan data dengan benar!")
@@ -134,7 +149,7 @@ def register():
     print("Password\t = " , password) 
     print("============================================")
 
-    datamember = ({'Nama': real_nama, 'Alamat' : alamat, 'Tanggal Lahir' : tanggal_lahir, 'Identitas' : identitas, 'Nomor identitas' : nomor_identitas,'Nomor HP': nomor_hp,'Username': username,'Password' : password})
+    datamember = ({'Nama': real_nama, 'Alamat' : alamat, 'Tanggal Lahir' : str(tanggal_lahir), 'Identitas' : identitas, 'Nomor identitas' : str(nomor_identitas),'Nomor HP': str(nomor_hp),'Username': username,'Password' : password})
 
     cekdata = input("Apakah data sudah benar? Y/N : ").upper()
     if cekdata == "Y":
@@ -636,7 +651,7 @@ def rincian():
     print("Kode transaksi\t\t: ", (str(no)+kode_cd))
     print("==================================================")
     
-    data_sewa = ({'No': no , 'Nama' : nama , 'No Identitas': no_ident ,'Kode transaksi' : (str(no)+kode_cd) ,'Judul CD' : judul_cd , "Tanggal Sewa" : str(hari_ini).split(',',1)[0] , "Tanggal Kembali" :str(tanggal_kembali).split(',',1)[0] , 'Status' : "Disewa", "Harga Sewa" : biaya_sewa, 'Tanggal Pengembalian' : '-', 'Denda' : '-', 'Total Harga': '-'})
+    data_sewa = ({'No': no , 'Nama' : nama , 'No Identitas': str(no_ident) + ' ' ,'Kode transaksi' : (str(no)+kode_cd) ,'Judul CD' : judul_cd , "Tanggal Sewa" : str(hari_ini).split(',',1)[0] , "Tanggal Kembali" :str(tanggal_kembali).split(',',1)[0] , 'Status' : "Disewa", "Harga Sewa" : biaya_sewa, 'Tanggal Pengembalian' : '-', 'Denda' : '-', 'Total Harga': '-'})
     df= df.append(data_sewa,ignore_index= True)
     with pd.ExcelWriter("database.xlsx", mode = "a",engine='openpyxl',if_sheet_exists='overlay') as writer:
         df.to_excel(writer,sheet_name="Data Sewa",index= False)
@@ -678,10 +693,39 @@ def pengembalian ():
     global hari_pengembalian
     global lebih_hari
     global tanggal_sewa
+    global no_ident
+    global user 
 
     status = "Dikembalikan"
+    list2 = user.split()
+    real_user = ""
+    for e in list2:
+        real_user = real_user + e.capitalize() + " "
     hari_pengembalian = datetime.date.today()
-    kode_transaksi = str(input("Masukkan kode transaksi : ")).upper()
+    while True:
+        while True:
+            kode_transaksi = str(input("Masukkan kode transaksi (Apabila anda lupa kode transaksi, ketik 0) :  ")).upper()
+            if kode_transaksi == '0':
+                list_sewa_user = df3.loc[df3.xs('Nama', axis=1)==real_user,['Kode transaksi','Judul CD','Status']].to_string(index=False)
+                print(list_sewa_user)
+                input("Tekan enter untuk melanjutkan....")
+                pengembalian()
+            else:
+                break
+        cd_disewa = df3.loc[df3.xs('Kode transaksi', axis=1)==kode_transaksi,'Judul CD'].to_string(index=False)
+        if cd_disewa == True :
+            break
+        else:
+            print(("Transaksi tidak ditemukan!"))
+            lupa_kodesewa = input("Apakah anda lupa kode transaksi anda? Y/N : ").upper()
+            if lupa_kodesewa == "Y":
+                list_sewa_user = df3.loc[df3.xs('Nama', axis=1)==real_user,['Kode transaksi','Judul CD','Status']].to_string(index=False)
+                print(list_sewa_user)
+            else:
+                pengembalian()
+
+
+
     cd_disewa = df3.loc[df3.xs('Kode transaksi', axis=1)==kode_transaksi,'Judul CD'].to_string(index=False)
     nama_penyewa = df3.loc[df3.xs('Kode transaksi', axis=1)==kode_transaksi,'Nama'].to_string(index=False)
     str_tanggal_sewa = df3.loc[df3.xs('Kode transaksi', axis=1)==kode_transaksi,'Tanggal Sewa']

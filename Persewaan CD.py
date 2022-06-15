@@ -1,4 +1,3 @@
-
 from glob import glob
 from threading import local
 from turtle import clear, st
@@ -7,6 +6,7 @@ import openpyxl
 from pkg_resources import FileMetadata
 import datetime
 import numpy as np
+import re
 
 def menu_utama():
     global cmu
@@ -34,8 +34,11 @@ def cek_login_member():
     cek_member = str(input("Apakah anda memiliki member? Y/N  : ")).upper()
     if cek_member == 'Y':
         login_member()
-    else:
+    elif cek_member == 'N':
         register()
+    else:
+        print("Mohon ketik Y jika anda memiliki member dan ketik N jika belum mempunyai member. ")
+        cek_login_member()
 
 def login_member():
     global nama
@@ -52,15 +55,15 @@ def login_member():
             nama = df.loc[df.Username==user,'Nama'].to_string(index=False)
             no_ident = (df.loc[df.Username==user,'Nomor identitas']).to_string(index=False)
             print("============================================")
-            print("Login sukses")
+            print("\t      Login sukses!")
             menu_member()
         else:
             ("============================================")
-            print("Password salah")
+            print("\t      Password salah!")
             return login_member()
     else:
         ("============================================")
-        print("Username tidak terdaftar")
+        print("\t Username tidak terdaftar!")
         return login_member()
 
 def login_admin():
@@ -82,12 +85,16 @@ def login_admin():
             print("Username salah!")
             print("============================================")
 
+def validasi_nomer(nomor_hp):
+    pola = re.compile('(08)?[0-9]\d{9}')
+    return pola.match(nomor_hp)
+
 def register():
     file = "database.xlsx"
     database= pd.read_excel(file,sheet_name="Data Member")
     df=pd.DataFrame(database)
 
-    print("============ BUAT MEMBER ANDA ============")
+    print("============ BUAT MEMBER ANDA =============")
     nama = str(input("Nama\t\t\t\t: "))
     list1 = nama.split()
     real_nama = ""
@@ -95,9 +102,19 @@ def register():
         real_nama = real_nama + e.capitalize() + " "
     alamat = str(input("Alamat\t\t\t\t: "))
     tanggal_lahir = str(input("Tanggal lahir (HH/BB/TTTT)\t: "))
-    identitas = str(input("Identitas (SIM/KTP)\t\t: ")).upper()
+    while True:
+        identitas = str(input("Identitas (SIM/KTP)\t\t: ")).upper()
+        if identitas == "SIM" and "KTP":
+            break
+        else:
+            print("Masukkan data dengan benar!")
     nomor_identitas = int(input("Nomor identitas\t\t\t: "))
-    nomor_hp = int(input("Nomor HP\t\t\t: "))
+    while True:
+        nomor_hp = input("Nomor HP\t\t\t: ")
+        if validasi_nomer(nomor_hp):
+            break
+        else:
+            print("Masukkan data dengan benar!")
     while True:
         username = str(input("Username\t\t\t: "))
         if username in (df['Username'].values):
@@ -165,7 +182,8 @@ def act_menu_admin():
         print("====================")
         print("Berhasil Logout !")
         print("====================")
-        menu_utama()
+        pass
+        return progam()
 
 def list_penyewa():
     file = "database.xlsx"
@@ -244,18 +262,22 @@ def tambah_genre():
 
     print("====================")
     genre_baru = str(input("Input genre baru :  "))
+    list1 = genre_baru.split()
+    real_genre = ""
+    for e in list1:
+        real_genre = real_genre + e.capitalize() + " "
     n = len(df["Genre"])
     new_id_genre= ord("A") + n
     id_genre= chr(new_id_genre)
     if id_genre in list(df['Kode'].values):
         id_genre=chr(new_id_genre+1)
-        data_genre = ({'Kode': id_genre, 'Genre' : genre_baru})
+        data_genre = ({'Kode': id_genre, 'Genre' : real_genre})
         df = df.append(data_genre,ignore_index= True)
         with pd.ExcelWriter("database.xlsx", mode = "a",engine='openpyxl', if_sheet_exists='replace') as writer:
             df.to_excel(writer,sheet_name="Data Genre",index= False)
         menu_genre()
     else:
-        data_genre = ({'Kode': id_genre, 'Genre' : genre_baru})
+        data_genre = ({'Kode': id_genre, 'Genre' : real_genre})
         df = df.append(data_genre,ignore_index= True)
         with pd.ExcelWriter("database.xlsx", mode = "a",engine='openpyxl', if_sheet_exists='replace') as writer:
             df.to_excel(writer,sheet_name="Data Genre",index= False)
@@ -271,7 +293,7 @@ def hapus_genre():
     print("==============")
     print(data.to_string(index=False))
     print("==============")
-    kode_genre = str(input("Masukkan kode genre yang ingin anda hapus : ")).upper
+    kode_genre = str(input("Masukkan kode genre yang ingin anda hapus : ")).upper()
     data_genre = df.loc[df.Kode==kode_genre,'Genre']
     print("Apa anda yakin ingin menghapus ", data_genre.to_string(index=False) ,"?")
     validasi_delete = str(input( "Y/N : ")).upper()
@@ -499,11 +521,11 @@ def ubah_stok():
 
 def menu_member():
     global mm
-    print("================MENU==================")
+    print("===================MENU=====================")
     print("1. Sewa CD ")
     print("2. Mengembalikan ")
     print("3. Log out ")
-    print("======================================")
+    print("============================================")
     while True:
         try:
             mm = int(input("Mohon masukkan angka 1/2/3 : "))
@@ -526,8 +548,7 @@ def act_menu_member():
         pengembalian()
     else:
         pass
-        clear
-        menu_utama()
+        return progam()
 
 def sewa_cd():
     global judul_cd
@@ -551,13 +572,13 @@ def sewa_cd():
     kode_genre = str(input("Masukkan kode genre yang diinginkan : ")).upper()
     print("========================")
     id_genre = df.loc[df.Kode==kode_genre,'Genre'].to_string(index=False)
-    list_cd = df2.loc[df2.Genre==id_genre, ['ID','Judul CD']]
+    list_cd = df2.loc[df2.Genre==id_genre, ['ID','Judul CD']].to_string(index=False)
     print(list_cd)
     print("========================")
-    no_judul = int(input("Masukkan nomor film yang ingin disewa\t: "))
-    judul_cd = df2.loc[no_judul, 'Judul CD']
-    kode_cd = df2.loc[no_judul, 'ID']
-    if df2.loc[no_judul, 'Stok tersedia'] == 0:
+    kode_judul = input("Masukkan kode film yang ingin disewa\t: ").upper()
+    judul_cd = df2.loc[df2.ID==kode_judul, 'Judul CD'].to_string(index=False)
+    kode_cd = df2.loc[df2.ID==kode_judul, 'ID'].to_string(index=False)
+    if df2.loc[df2.ID==kode_judul, 'Stok tersedia'].to_string(index=False) == '0':
         print("Stok CD telah habis!")
         sewa_cd()
     lama_pinjam = int(input("Lama peminjamaan (Dalam hari)\t\t: "))
@@ -711,13 +732,13 @@ def pengembalian ():
             print("=======STRUK=========")
             print("Nama Lengkap\t\t: ", nama )
             print("No.Identitas\t\t: ", no_ident )
-            print("Judul CD\t: ", cd_disewa)
+            print("Judul CD\t\t: ", cd_disewa)
             print("Kode transaksi\t\t: ", kode_transaksi)
             print("Tanggal sewa\t\t: ",  tanggal_sewa.date())
             print("Lama peminjaman\t\t: ", y  , "hari")
             print("Tanggal pengembalian\t: ",  hari_pengembalian)
             print("Harga sewa\t\t: ", harga_sewa.to_string(index=False))
-            print("Denda\t\t: - ")
+            print("Denda\t\t\t: - ")
             print("Total harga\t\t: ", harga_sewa.to_string(index=False))
             print("====================")
             df3.loc[df3.xs('Kode transaksi', axis=1)==kode_transaksi,'Status'] = status
@@ -727,6 +748,9 @@ def pengembalian ():
             with pd.ExcelWriter("database.xlsx", mode = "a",engine='openpyxl', if_sheet_exists='replace') as writer:
                 df3.to_excel(writer,sheet_name="Data Sewa",index= False)
             menu_member()
+    else:
+        print("Transaksi sewa tidak dapat ditemukan!")
+        return pengembalian()
 
 def progam():
     global cmu
@@ -737,5 +761,5 @@ def progam():
     else:
         login_admin()
 
-progam()
-        
+if __name__ == '__main__':
+    progam()

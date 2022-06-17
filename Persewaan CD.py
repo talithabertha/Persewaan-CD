@@ -88,7 +88,7 @@ def login_admin():
         if admin == "admin":
             if passadmin == "admin":
                 print("============================================")
-                print("Login sukses!")
+                print("\t      Login sukses!")
                 menu_admin()
                 break
             else:

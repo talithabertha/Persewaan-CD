@@ -34,7 +34,17 @@ def menu_utama():
 def cek_login_member():
     global cek_member
     print("============================================")
-    cek_member = str(input("Apakah anda memiliki member? Y/N  : ")).upper()
+    while True:
+        try:
+            cek_member = str(input("Apakah anda memiliki member? Y/N  : ")).upper()
+        except:
+            print("Mohon ketik Y jika anda memiliki member dan ketik N jika belum mempunyai member. ")
+        else:
+            if cek_member in ['Y','N']:
+                break
+            else:
+                print("Mohon ketik Y jika anda memiliki member dan ketik N jika belum mempunyai member. ")
+                pass
     if cek_member == 'Y':
         login_member()
     elif cek_member == 'N':
@@ -149,9 +159,18 @@ def register():
     print("Password\t = " , password) 
     print("============================================")
 
-    datamember = ({'Nama': real_nama, 'Alamat' : alamat, 'Tanggal Lahir' : str(tanggal_lahir), 'Identitas' : identitas, 'Nomor identitas' : str(nomor_identitas),'Nomor HP': str(nomor_hp),'Username': username,'Password' : password})
-
-    cekdata = input("Apakah data sudah benar? Y/N : ").upper()
+    datamember = ({'Nama': real_nama, 'Alamat' : alamat, 'Tanggal Lahir' : str(tanggal_lahir), 'Identitas' : identitas, 'Nomor identitas' : str(nomor_identitas),'Nomor HP': str(nomor_hp),'Username': username,'Password' : str(password)})
+    while True:
+        try:
+            cekdata = input("Apakah data sudah benar? Y/N : ").upper()
+        except:
+            print("Mohon ketik Y jika data anda sudah benar dan ketik N jika data salah. ")
+        else:
+            if cekdata in ['Y','N']:
+                break
+            else:
+                print("Mohon ketik Y jika data anda sudah benar dan ketik N jika data salah. ")
+                pass
     if cekdata == "Y":
         print("============================================")
         df= df.append(datamember,ignore_index= True)
@@ -160,18 +179,22 @@ def register():
         print("Registrasi Berhasil") 
         print("============================================")   
         return progam()
-    else:
+    elif cekdata == 'N':
         print("============================================")
         print("Mohon masukkan data dengan benar !")
+        return register ()
+    else:
+        print("============================================")
+        print("Mohon ketik Y jika data anda sudah benar dan ketik N jika data salah. ")
         return register ()
 
 def menu_admin():
     global el
-    print("================MENU==================")
+    print("==================MENU======================")
     print("1. Edit ")
     print("2. List penyewa ")
     print("3. Log out ")
-    print("======================================")
+    print("============================================")
     while True:
         try:
             el = int(input("Mohon masukkan angka 1/2/3 : "))
@@ -194,9 +217,9 @@ def act_menu_admin():
     elif el == 2:
         list_penyewa()
     else:
-        print("====================")
-        print("Berhasil Logout !")
-        print("====================")
+        print("============================================")
+        print("\t     Berhasil Logout !")
+        print("============================================")
         pass
         return progam()
 
@@ -212,11 +235,11 @@ def list_penyewa():
 
 def menu_edit():
     global me
-    print("===========EDIT MENU============")
+    print("=================EDIT MENU==================")
     print("1. List CD")
     print("2. Genre ")
     print("3. Kembali ")
-    print("==================================")
+    print("============================================")
     while True:
         try:
             me = int(input("Mohon masukkan angka 1/2/3 : "))
@@ -242,11 +265,11 @@ def act_menu_edit():
 
 def menu_genre():
     global meg
-    print("===========EDIT GENRE============")
+    print("=================EDIT GENRE=================")
     print("1. Tambah Genre")
     print("2. Hapus Genre ")
     print("3. Kembali ")
-    print("==================================")
+    print("============================================")
     while True:
         try:
             meg = int(input("Mohon masukkan angka 1/2/3 : "))
@@ -275,7 +298,7 @@ def tambah_genre():
     database= pd.read_excel(file,sheet_name="Data Genre")
     df=pd.DataFrame(database)   
 
-    print("====================")
+    print("============================================")
     genre_baru = str(input("Input genre baru :  "))
     list1 = genre_baru.split()
     real_genre = ""
@@ -305,13 +328,23 @@ def hapus_genre():
     
 
     data = df.loc[:,['Genre','Kode']]
-    print("==============")
+    print("============================================")
     print(data.to_string(index=False))
-    print("==============")
+    print("============================================")
     kode_genre = str(input("Masukkan kode genre yang ingin anda hapus : ")).upper()
     data_genre = df.loc[df.Kode==kode_genre,'Genre']
     print("Apa anda yakin ingin menghapus ", data_genre.to_string(index=False) ,"?")
-    validasi_delete = str(input( "Y/N : ")).upper()
+    while True:
+        try:
+            validasi_delete = str(input( "Y/N : ")).upper()
+        except:
+            print("Mohon ketik Y jika anda ingin menghapus genre dan ketik N jika tidak. ")
+        else:
+            if validasi_delete in ['Y','N']:
+                break
+            else:
+                print("Mohon ketik Y jika anda ingin menghapus genre dan ketik N jika tidak. ")
+                pass
     if validasi_delete == "Y":
         delete_data_genre = df[df['Kode'] != kode_genre]
         with pd.ExcelWriter("database.xlsx", mode = "a",engine='openpyxl', if_sheet_exists='replace') as writer:
@@ -325,12 +358,12 @@ def hapus_genre():
 
 def menu_editlistCD():
     global elc
-    print("============EDIT LIST============")
+    print("=================EDIT LIST==================")
     print("1. Tambah judul CD")
     print("2. Hapus judul CD ")
     print("3. Edit stok CD ")
     print("4. Kembali ")
-    print("==================================")
+    print("============================================")
     while True:
         try:
             elc = int(input("Mohon masukkan angka 1/2/3 : "))
@@ -363,9 +396,9 @@ def pilih_genre():
     database= pd.read_excel(file,sheet_name="Data Genre")
     df=pd.DataFrame(database)
     data = df.loc[:,['Genre','Kode']]
-    print("==============")
+    print("============================================")
     print(data.to_string(index=False))
-    print("==============")
+    print("============================================")
     kode_genre= str(input("Pilih kode genre yang ingin anda tambah judul CDnya : ")).upper()
     
 def nambahCD():
@@ -376,7 +409,7 @@ def nambahCD():
     database2= pd.read_excel(file,sheet_name="Data Genre")
     df=pd.DataFrame(database)
     df2=pd.DataFrame(database2)
-    print("==============")
+    print("============================================")
     while True:
         judul_cd = str(input("Judul CD\t: "))
         list1 = judul_cd.split()
@@ -386,7 +419,17 @@ def nambahCD():
 
         if real_judul_cd in (df['Judul CD'].values):
             print("Judul CD sudah ada! ")
-            ask_nambah_stok = str(input("Apakah anda ingin menambah stok? Y/N : " )).upper()
+            while True:
+                try:
+                    ask_nambah_stok = str(input("Apakah anda ingin menambah stok? Y/N : " )).upper()
+                except:
+                    print("Mohon ketik Y jika anda ingin menambah stok dan ketik N jika tidak. ")
+                else:
+                    if ask_nambah_stok in ['Y','N']:
+                        break
+                    else:
+                        print("Mohon ketik Y jika anda ingin menambah stok dan ketik N jika tidak. ")
+                        pass
             if ask_nambah_stok == 'Y':
                 nambah_stok()
             else:
@@ -395,7 +438,7 @@ def nambahCD():
             break
 
     stok_cd = int(input("Stok CD\t\t: "))
-    print("==============")
+    print("============================================")
     id_cd = kode_genre + str(len(df["ID"]) + 1)
     while True:
         if id_cd in list(df['ID'].values):
@@ -406,11 +449,20 @@ def nambahCD():
     print("Genre\t\t:", genre_cd)
     print("Judul CD\t:", real_judul_cd)
     print("Stok\t\t:", stok_cd)
-    print("==============")
+    print("============================================")
 
     data_cd = ({'ID': id_cd, 'Genre': genre_cd, 'Judul CD': real_judul_cd, 'Stok': stok_cd, 'Stok tersedia': stok_cd})
-
-    cekdata = input("Apakah data sudah benar? Y/N : ").upper()
+    while True:
+        try:
+            cekdata = input("Apakah data sudah benar? Y/N : ").upper()
+        except:
+            print("Mohon ketik Y jika data anda sudah benar dan ketik N jika belum benar. ")
+        else:
+            if cekdata in ['Y','N']:
+                break
+            else:
+                print("Mohon ketik Y jika data anda sudah benar dan ketik N jika belum benar. ")
+                pass
     if cekdata == "Y":
         print("============================================")
         df= df.append(data_cd,ignore_index= True)
@@ -419,7 +471,7 @@ def nambahCD():
         print("Input CD berhasil!") 
         print("============================================")   
         return menu_edit()
-    else:
+    elif cekdata == "N":
         print("============================================")
         print("Mohon masukkan data dengan benar !")
         return nambahCD()
@@ -430,21 +482,31 @@ def hapus_cd():
     df=pd.DataFrame(database)
 
     data = df.loc[:,['ID','Judul CD']].to_string(index=False)
-    print("==============")
+    print("============================================")
     print(data)
-    print("==============")
+    print("============================================")
     
     id_cd = str(input("Masukkan ID CD yang ingin dihapus : ")).upper()
     validasi_delete_cd = df.loc[df.ID==id_cd,'Judul CD'].to_string(index=False)
     print("Apa anda yakin ingin menghapus ", validasi_delete_cd, "?")
-    validasi_delete = str(input( "Y/N :")).upper()
+    while True:
+        try:
+            validasi_delete = str(input( "Y/N :")).upper()
+        except:
+            print("Mohon ketik Y jika anda ingin menghapus", validasi_delete_cd, " dan ketik N jika tidak. ")
+        else:
+            if validasi_delete in ['Y','N']:
+                break
+            else:
+                print("Mohon ketik Y jika anda ingin menghapus", validasi_delete_cd, " dan ketik N jika tidak. ")
+                pass
     if validasi_delete == "Y":
         delete_data_cd = df[df['ID'] != id_cd]
         with pd.ExcelWriter("database.xlsx", mode = "a",engine='openpyxl', if_sheet_exists='replace') as writer:
             delete_data_cd.to_excel(writer,sheet_name="Data CD",index= False)
         print("Judul CD telah dihapus!")
         menu_editlistCD()
-    else:
+    elif validasi_delete == "N":
         print("============================================")
         print("Mohon masukkan ID CD dengan benar !")
         hapus_cd()
@@ -460,13 +522,23 @@ def nambah_stok():
     stok_lama = df.loc[df.xs('Judul CD', axis=1)== real_judul_cd,'Stok'].to_string(index=False)
     int_stok_lama = df.loc[df.xs('Judul CD', axis=1)== real_judul_cd,'Stok']
     stok_tersedia_lama = df.loc[df.xs('Judul CD', axis=1)== real_judul_cd,'Stok tersedia']
-    print("==============") 
+    print("============================================") 
     print("Genre :", genre)
     print("Judul CD :", real_judul_cd)
     print("Stok lama :", stok_lama)
     print("Stok baru:", new_stok)
-    print("==============")
-    cekdata = input("Apakah data sudah benar? Y/N : ").upper()
+    print("============================================")
+    while True:
+        try:
+            cekdata = input("Apakah data sudah benar? Y/N : ").upper()
+        except:
+            print("Mohon ketik Y jika data anda sudah benar dan ketik N jika belum. ")
+        else:
+            if cekdata in ['Y','N']:
+                break
+            else:
+                print("Mohon ketik Y jika data anda sudah benar dan ketik N jika belum. ")
+                pass
     if cekdata == "Y":
         if new_stok > int(int_stok_lama):
             new_stok_tersedia = (new_stok - int_stok_lama) + stok_tersedia_lama 
@@ -495,9 +567,9 @@ def ubah_stok():
     df=pd.DataFrame(database)
 
     data = df.loc[:,'ID':'Stok'].to_string(index=False)
-    print("==============")
+    print("============================================")
     print(data)
-    print("==============")
+    print("============================================")
     id_stok_cd = str(input("Masukkan ID CD yang ingin diubah stoknya : ")).upper()
     new_stok = int(input("Masukkan jumlah stok baru :"))
     judul = df.loc[df.ID==id_stok_cd,'Judul CD'].to_string(index=False)
@@ -505,13 +577,23 @@ def ubah_stok():
     stok_lama = df.loc[df.ID==id_stok_cd,'Stok'].to_string(index=False)
     int_stok_lama = df.loc[df.ID==id_stok_cd,'Stok']
     stok_tersedia_lama = df.loc[df.ID==id_stok_cd,'Stok tersedia']
-    print("==============")
+    print("============================================")
     print("Genre\t: ", genre)
     print("Judul CD\t: ", judul)
     print("Stok lama\t: ", stok_lama)
     print("Stok baru\t: ", new_stok)
-    print("==============")
-    cekdata = input("Apakah data sudah benar? Y/N : ").upper()
+    print("============================================")
+    while True:
+        try:
+            cekdata = input("Apakah data sudah benar? Y/N : ").upper()
+        except:
+            print("Mohon ketik Y jika data anda sudah benar dan ketik N jika belum. ")
+        else:
+            if cekdata in ['Y','N']:
+                break
+            else:
+                print("Mohon ketik Y jika data anda sudah benar dan ketik N jika belum. ")
+                pass
     if cekdata == "Y":
         if new_stok > int(int_stok_lama):
             new_stok_tersedia = (new_stok - int_stok_lama) + stok_tersedia_lama
@@ -562,6 +644,9 @@ def act_menu_member():
     elif mm == 2:
         pengembalian()
     else:
+        print("============================================")
+        print("\t     Berhasil Logout !")
+        print("============================================")
         pass
         return progam()
 
@@ -581,15 +666,15 @@ def sewa_cd():
     df2.index = np.arange(1, len(df2)+1)
 
     data = df.loc[:,['Genre','Kode']]
-    print("======Pilih Genre=======")
+    print("=================Pilih Genre================")
     print(data.to_string(index=False))
-    print("========================")
+    print("============================================")
     kode_genre = str(input("Masukkan kode genre yang diinginkan : ")).upper()
-    print("========================")
+    print("============================================")
     id_genre = df.loc[df.Kode==kode_genre,'Genre'].to_string(index=False)
     list_cd = df2.loc[df2.Genre==id_genre, ['ID','Judul CD']].to_string(index=False)
     print(list_cd)
-    print("========================")
+    print("============================================")
     kode_judul = input("Masukkan kode film yang ingin disewa\t: ").upper()
     judul_cd = df2.loc[df2.ID==kode_judul, 'Judul CD'].to_string(index=False)
     kode_cd = df2.loc[df2.ID==kode_judul, 'ID'].to_string(index=False)
@@ -597,11 +682,21 @@ def sewa_cd():
         print("Stok CD telah habis!")
         sewa_cd()
     lama_pinjam = int(input("Lama peminjamaan (Dalam hari)\t\t: "))
-    print("========================")
+    print("============================================")
     print("Judul\t\t:", judul_cd)
     print("Lama peminjaman\t:", lama_pinjam , "  hari")
-    print("========================")
-    validasi_sewa = str(input("Apakah data sudah benar? Y/N  : ")).upper()
+    print("============================================")
+    while True:
+        try:
+            validasi_sewa = str(input("Apakah data sudah benar? Y/N  : ")).upper()
+        except:
+            print("Mohon ketik Y jika data anda sudah benar dan ketik N jika belum. ")
+        else:
+            if validasi_sewa in ['Y','N']:
+                break
+            else:
+                print("Mohon ketik Y jika data anda sudah benar dan ketik N jika belum. ")
+                pass
     if validasi_sewa == "Y":
         stok_tersedia = df2.loc[df2.xs('Judul CD', axis=1)== judul_cd,'Stok tersedia']
         new_stok_tersedia = stok_tersedia - 1
@@ -640,7 +735,7 @@ def rincian():
             no = no + 1
         else:
             break
-    print("====================RINCIAN=======================")
+    print("==================RINCIAN===================")
     print("Nama Lengkap\t\t: ", nama )
     print("No.Identitas\t\t: ", no_ident )
     print("Judul CD\t\t: ", judul_cd)
@@ -649,12 +744,13 @@ def rincian():
     print("Tanggal kembali\t\t: ",  tanggal_kembali)
     print("Harga sewa\t\t: ", biaya_sewa)
     print("Kode transaksi\t\t: ", (str(no)+kode_cd))
-    print("==================================================")
+    print("============================================")
     
     data_sewa = ({'No': no , 'Nama' : nama , 'No Identitas': str(no_ident) + ' ' ,'Kode transaksi' : (str(no)+kode_cd) ,'Judul CD' : judul_cd , "Tanggal Sewa" : str(hari_ini).split(',',1)[0] , "Tanggal Kembali" :str(tanggal_kembali).split(',',1)[0] , 'Status' : "Disewa", "Harga Sewa" : biaya_sewa, 'Tanggal Pengembalian' : '-', 'Denda' : '-', 'Total Harga': '-'})
     df= df.append(data_sewa,ignore_index= True)
     with pd.ExcelWriter("database.xlsx", mode = "a",engine='openpyxl',if_sheet_exists='overlay') as writer:
         df.to_excel(writer,sheet_name="Data Sewa",index= False)
+    input("Tekan enter untuk melanjutkan....")
     menu_member()
 
 def kelebihanhari():
@@ -695,7 +791,7 @@ def pengembalian ():
     global tanggal_sewa
     global no_ident
     global user 
-
+    print("============================================")
     status = "Dikembalikan"
     list2 = user.split()
     real_user = ""
@@ -703,28 +799,35 @@ def pengembalian ():
         real_user = real_user + e.capitalize() + " "
     hari_pengembalian = datetime.date.today()
     while True:
-        while True:
-            kode_transaksi = str(input("Masukkan kode transaksi (Apabila anda lupa kode transaksi, ketik 0) :  ")).upper()
-            if kode_transaksi == '0':
-                list_sewa_user = df3.loc[df3.xs('Nama', axis=1)==real_user,['Kode transaksi','Judul CD','Status']].to_string(index=False)
-                print(list_sewa_user)
-                input("Tekan enter untuk melanjutkan....")
-                pengembalian()
-            else:
-                break
-        cd_disewa = df3.loc[df3.xs('Kode transaksi', axis=1)==kode_transaksi,'Judul CD'].to_string(index=False)
-        if cd_disewa == True :
-            break
+        kode_transaksi = str(input("Masukkan kode transaksi (Apabila anda lupa kode transaksi, ketik 0) :  ")).upper()
+        if kode_transaksi == '0':
+            print("============================================")
+            list_sewa_user = df3.loc[df3.xs('Nama', axis=1)==real_user,['Kode transaksi','Judul CD','Status']].to_string(index=False)
+            print(list_sewa_user)
+            print("============================================")
+            input("Tekan enter untuk melanjutkan....")
+            pengembalian()
         else:
-            print(("Transaksi tidak ditemukan!"))
-            lupa_kodesewa = input("Apakah anda lupa kode transaksi anda? Y/N : ").upper()
-            if lupa_kodesewa == "Y":
-                list_sewa_user = df3.loc[df3.xs('Nama', axis=1)==real_user,['Kode transaksi','Judul CD','Status']].to_string(index=False)
-                print(list_sewa_user)
+            if kode_transaksi in list(df3.loc[df3.Nama==real_user,'Kode transaksi']):
+                status_sewa = df3.loc[df3.xs('Kode transaksi', axis=1)==kode_transaksi,'Status'].to_string(index=False)
+                if status_sewa == 'Dikembalikan':
+                    print("============================================")
+                    print("\tCD telah dikembalikan!")
+                    menu_member()
+                else:
+                    break
             else:
-                pengembalian()
-
-
+                print("============================================")
+                print("Transaksi sewa tidak dapat ditemukan!")
+                lupa_kodesewa = input("Apakah anda lupa kode transaksi anda? Y/N : ").upper()
+                if lupa_kodesewa == "Y":
+                    print("============================================")
+                    list_sewa_user = df3.loc[df3.xs('Nama', axis=1)==real_user,['Kode transaksi','Judul CD','Status']].to_string(index=False)
+                    print(list_sewa_user)
+                    input("Tekan enter untuk melanjutkan....")
+                    print("============================================")
+                else:
+                    pengembalian()
 
     cd_disewa = df3.loc[df3.xs('Kode transaksi', axis=1)==kode_transaksi,'Judul CD'].to_string(index=False)
     nama_penyewa = df3.loc[df3.xs('Kode transaksi', axis=1)==kode_transaksi,'Nama'].to_string(index=False)
@@ -744,14 +847,12 @@ def pengembalian ():
         str_lebih_hari = str_lebih_hari.replace('day','')
         str_lama_sewa = str_lama_sewa.replace('days','')
         str_lama_sewa = str_lama_sewa.replace('day','')
-        print(str_lebih_hari)
-        print(str_lama_sewa)
         x = int(str_lebih_hari)
         y = int(str_lama_sewa)
         
         if x > y:
             denda = 5000* int(str_lebih_hari) 
-            print("=======STRUK=========")
+            print("===================STRUK====================")
             print("Nama Lengkap\t\t: ", nama )
             print("No.Identitas\t\t: ", no_ident )
             print("Judul CD\t\t: ", cd_disewa)
@@ -763,7 +864,7 @@ def pengembalian ():
             print("Denda\t\t\t: ", denda)
             total_harga = int(harga_sewa) + int(denda)
             print("Total harga\t\t: ", total_harga )
-            print("=====================")
+            print("============================================")
 
             df3.loc[df3.xs('Kode transaksi', axis=1)==kode_transaksi,'Status'] = status
             df3.loc[df3.xs('Kode transaksi', axis=1)==kode_transaksi,'Tanggal Pengembalian'] =str(hari_pengembalian).split(',',1)[0]
@@ -771,9 +872,15 @@ def pengembalian ():
             df3.loc[df3.xs('Kode transaksi', axis=1)==kode_transaksi,'Total Harga'] = total_harga
             with pd.ExcelWriter("database.xlsx", mode = "a",engine='openpyxl', if_sheet_exists='replace') as writer:
                 df3.to_excel(writer,sheet_name="Data Sewa",index= False)
+            stok_tersedia = df2.loc[df2.xs('Judul CD', axis=1)==cd_disewa,'Stok tersedia'].to_string(index=False)
+            stok_baru = int(stok_tersedia) + 1
+            df2.loc[df2.xs('Judul CD', axis=1)==cd_disewa,'Stok tersedia'] = stok_baru
+            with pd.ExcelWriter("database.xlsx", mode = "a",engine='openpyxl', if_sheet_exists='replace') as writer:
+                df2.to_excel(writer,sheet_name="Data CD",index= False)
+            input("Tekan enter untuk melanjutkan....")
             menu_member()
         else:
-            print("=======STRUK=========")
+            print("===================STRUK====================")
             print("Nama Lengkap\t\t: ", nama )
             print("No.Identitas\t\t: ", no_ident )
             print("Judul CD\t\t: ", cd_disewa)
@@ -784,17 +891,31 @@ def pengembalian ():
             print("Harga sewa\t\t: ", harga_sewa.to_string(index=False))
             print("Denda\t\t\t: - ")
             print("Total harga\t\t: ", harga_sewa.to_string(index=False))
-            print("====================")
+            print("============================================")
             df3.loc[df3.xs('Kode transaksi', axis=1)==kode_transaksi,'Status'] = status
             df3.loc[df3.xs('Kode transaksi', axis=1)==kode_transaksi,'Tanggal Pengembalian'] = str(hari_pengembalian).split(',',1)[0]
             df3.loc[df3.xs('Kode transaksi', axis=1)==kode_transaksi,'Denda'] = "-"
             df3.loc[df3.xs('Kode transaksi', axis=1)==kode_transaksi,'Total Harga'] = harga_sewa
             with pd.ExcelWriter("database.xlsx", mode = "a",engine='openpyxl', if_sheet_exists='replace') as writer:
                 df3.to_excel(writer,sheet_name="Data Sewa",index= False)
+            stok_tersedia = df2.loc[df2.xs('Judul CD', axis=1)==cd_disewa,'Stok tersedia'].to_string(index=False)
+            stok_baru = int(stok_tersedia) + 1
+            df2.loc[df2.xs('Judul CD', axis=1)==cd_disewa,'Stok tersedia'] = stok_baru
+            with pd.ExcelWriter("database.xlsx", mode = "a",engine='openpyxl', if_sheet_exists='replace') as writer:
+                df2.to_excel(writer,sheet_name="Data CD",index= False)
+            input("Tekan enter untuk melanjutkan....")
             menu_member()
     else:
         print("Transaksi sewa tidak dapat ditemukan!")
-        return pengembalian()
+        lupa_kodesewa = input("Apakah anda lupa kode transaksi anda? Y/N : ").upper()
+        if lupa_kodesewa == "Y":
+            list_sewa_user = df3.loc[df3.xs('Nama', axis=1)==real_user,['Kode transaksi','Judul CD','Status']].to_string(index=False)
+            print(list_sewa_user)
+            input("Tekan enter untuk melanjutkan....")
+            pengembalian()
+
+        else:
+            pengembalian()
 
 def progam():
     global cmu
